@@ -1,18 +1,17 @@
 /* ==========================================================
    Theme — "Deep Navy & Muted Gold" (formal / institutional)
-   Change the values below to re-theme the whole site.
+   Open layout: no boxes. Content reveals and expands on scroll.
    Fonts: Cormorant Garamond (headings) + Source Sans 3 (body)
    ========================================================== */
 :root {
-  --navy-900: #081426;   /* header, navbar, footer */
-  --navy-700: #0f2547;   /* gradient end, hovers */
-  --navy-500: #16386b;   /* sub-headings, accents */
-  --gold-500: #b8975a;   /* muted gold accent */
-  --gold-600: #8f7240;   /* darker gold for text on light */
-  --ink: #0f1b2d;        /* main text */
-  --slate: #3d4a5f;      /* secondary text */
-  --mist: #f4f6fa;       /* page background */
-  --card: #ffffff;
+  --navy-900: #081426;
+  --navy-700: #0f2547;
+  --navy-500: #16386b;
+  --gold-500: #b8975a;
+  --gold-600: #8f7240;
+  --ink: #0f1b2d;
+  --slate: #3d4a5f;
+  --mist: #f6f8fb;
   --line: #d9dfe9;
 
   --font-heading: "Cormorant Garamond", Georgia, "Times New Roman", serif;
@@ -39,7 +38,7 @@ body {
 }
 
 .container {
-  max-width: 1000px;
+  max-width: 900px;
   margin: 0 auto;
   padding: 0 24px;
 }
@@ -48,7 +47,7 @@ body {
 .header {
   background: linear-gradient(160deg, var(--navy-900) 0%, var(--navy-700) 100%);
   color: white;
-  padding: 90px 0 56px;
+  padding: 100px 0 64px;
   text-align: center;
   border-bottom: 3px solid var(--gold-500);
 }
@@ -73,7 +72,6 @@ body {
 .header .subtitle {
   margin-top: 10px;
   color: #b8c3d4;
-  font-size: 1rem;
   letter-spacing: 0.5px;
 }
 
@@ -98,53 +96,113 @@ body {
   display: block;
   color: #e6ebf3;
   text-decoration: none;
-  padding: 16px 16px;
+  padding: 16px;
   font-size: 0.82rem;
   letter-spacing: 1.5px;
   text-transform: uppercase;
   font-weight: 600;
-  transition: background 0.25s ease, color 0.25s ease;
+  transition: color 0.25s ease, box-shadow 0.25s ease;
 }
 
-.nav-links a:hover {
-  background: var(--gold-500);
-  color: var(--navy-900);
+.nav-links a:hover,
+.nav-links a.active {
+  color: var(--gold-500);
+  box-shadow: inset 0 -3px 0 var(--gold-500);
 }
 
 /* ---------- Sections ---------- */
 .section {
-  padding: 56px 0 40px;
+  padding: 70px 0 30px;
 }
 
 .section h2 {
   font-family: var(--font-heading);
-  font-size: 2.3rem;
+  font-size: 2.5rem;
   font-weight: 700;
-  margin-bottom: 28px;
+  margin-bottom: 36px;
   color: var(--navy-900);
-  border-bottom: 2px solid var(--gold-500);
-  display: inline-block;
-  padding-bottom: 6px;
+  position: relative;
+  padding-bottom: 12px;
+}
+
+/* gold rule under each heading that draws in on scroll */
+.section h2::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 70px;
+  background: var(--gold-500);
+  transition: width 0.9s ease;
+}
+
+.section h2.in-view::after {
+  width: 160px;
 }
 
 .section p {
-  font-size: 1.08rem;
+  font-size: 1.1rem;
   color: var(--slate);
 }
 
-/* ---------- Timeline (experience & education) ---------- */
+/* ---------- Open timeline (no boxes) ---------- */
 .timeline {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
+  position: relative;
+  padding-left: 32px;
+}
+
+/* vertical line that grows as you scroll (height set by script.js) */
+.timeline::before {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 6px;
+  width: 2px;
+  height: var(--line-progress, 0%);
+  max-height: calc(100% - 12px);
+  background: linear-gradient(to bottom, var(--gold-500), var(--navy-500));
+  transition: height 0.15s linear;
+}
+
+.timeline::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 6px;
+  bottom: 6px;
+  width: 2px;
+  background: var(--line);
+  z-index: -1;
 }
 
 .entry {
-  background: var(--card);
-  padding: 26px 30px;
-  border: 1px solid var(--line);
-  border-left: 4px solid var(--navy-900);
-  border-radius: 2px;
+  position: relative;
+  padding: 0 0 38px;
+}
+
+.entry:last-child {
+  padding-bottom: 8px;
+}
+
+/* dot on the line */
+.entry::before {
+  content: "";
+  position: absolute;
+  left: -32px;
+  top: 8px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--mist);
+  border: 2px solid var(--line);
+  transition: background 0.4s ease, border-color 0.4s ease, transform 0.4s ease;
+}
+
+.entry.in-view::before {
+  background: var(--gold-500);
+  border-color: var(--gold-500);
+  transform: scale(1.15);
 }
 
 .entry-head {
@@ -152,14 +210,13 @@ body {
   justify-content: space-between;
   align-items: baseline;
   flex-wrap: wrap;
-  gap: 6px 16px;
-  margin-bottom: 4px;
+  gap: 4px 16px;
 }
 
 .entry h3 {
   font-family: var(--font-heading);
   color: var(--navy-900);
-  font-size: 1.45rem;
+  font-size: 1.55rem;
   font-weight: 700;
   line-height: 1.25;
 }
@@ -167,7 +224,6 @@ body {
 .entry .org {
   color: var(--navy-500);
   font-weight: 600;
-  font-size: 0.98rem;
 }
 
 .entry .date {
@@ -191,106 +247,95 @@ body {
 
 .entry li {
   margin-bottom: 6px;
-  font-size: 1rem;
 }
 
 .badge {
   display: inline-block;
   margin-top: 10px;
-  padding: 3px 12px;
-  border: 1px solid var(--gold-500);
-  border-radius: 2px;
   color: var(--gold-600);
   font-size: 0.8rem;
   font-weight: 600;
   letter-spacing: 1px;
   text-transform: uppercase;
+  border-bottom: 1px solid var(--gold-500);
 }
 
-/* ---------- Highlight stats ---------- */
+/* ---------- Highlight figures (open, no boxes) ---------- */
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-  gap: 16px;
-  margin-top: 28px;
-}
-
-.stat {
-  background: var(--navy-900);
-  color: white;
-  padding: 22px 18px;
-  border-radius: 2px;
-  border-top: 3px solid var(--gold-500);
-  text-align: center;
+  gap: 28px;
+  margin-top: 40px;
+  padding-top: 30px;
+  border-top: 1px solid var(--line);
 }
 
 .stat strong {
   display: block;
   font-family: var(--font-heading);
-  font-size: 2rem;
+  font-size: 2.4rem;
   font-weight: 700;
-  color: var(--gold-500);
+  line-height: 1.1;
+  color: var(--navy-900);
 }
 
 .stat span {
-  font-size: 0.88rem;
-  color: #b8c3d4;
+  font-size: 0.9rem;
+  color: var(--slate);
 }
 
-/* ---------- Skills ---------- */
+/* ---------- Skills (open columns) ---------- */
 .skills-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 18px;
-  margin-top: 8px;
-}
-
-.skill-card {
-  background: var(--card);
-  padding: 26px;
-  border: 1px solid var(--line);
-  border-top: 3px solid var(--navy-900);
-  border-radius: 2px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 36px;
 }
 
 .skill-card h3 {
   font-family: var(--font-heading);
   color: var(--navy-900);
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   font-weight: 700;
-  margin-bottom: 8px;
+  padding-bottom: 6px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid var(--line);
 }
 
 .tags {
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 10px;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .tags span {
-  background: var(--mist);
-  border: 1px solid var(--line);
-  color: var(--navy-900);
-  padding: 4px 12px;
-  border-radius: 2px;
-  font-size: 0.9rem;
+  color: var(--slate);
+  padding-left: 14px;
+  position: relative;
 }
 
-/* ---------- Certifications list ---------- */
+.tags span::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.7em;
+  width: 6px;
+  height: 1px;
+  background: var(--gold-500);
+}
+
+/* ---------- Certifications (open list) ---------- */
 .cert-list {
   list-style: none;
-  display: grid;
-  gap: 10px;
 }
 
 .cert-list li {
-  background: var(--card);
-  padding: 16px 22px;
-  border: 1px solid var(--line);
-  border-left: 4px solid var(--gold-500);
-  border-radius: 2px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
   color: var(--slate);
+}
+
+.cert-list li:first-child {
+  border-top: 1px solid var(--line);
 }
 
 .cert-list strong {
@@ -301,29 +346,24 @@ body {
 .contact-links {
   display: flex;
   flex-wrap: wrap;
-  gap: 14px;
+  gap: 28px;
   margin-top: 20px;
 }
 
 .contact-button {
-  display: inline-block;
-  padding: 12px 28px;
-  border-radius: 2px;
-  background: var(--navy-900);
-  color: white;
+  color: var(--navy-900);
   text-decoration: none;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   font-weight: 600;
   letter-spacing: 1.5px;
   text-transform: uppercase;
-  border: 1px solid var(--navy-900);
-  transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+  padding-bottom: 4px;
+  border-bottom: 2px solid var(--gold-500);
+  transition: color 0.25s ease;
 }
 
 .contact-button:hover {
-  background: var(--gold-500);
-  border-color: var(--gold-500);
-  color: var(--navy-900);
+  color: var(--gold-600);
 }
 
 /* ---------- Footer ---------- */
@@ -335,7 +375,51 @@ body {
   font-size: 0.9rem;
   letter-spacing: 1px;
   border-top: 3px solid var(--gold-500);
-  margin-top: 40px;
+  margin-top: 60px;
+}
+
+/* ==========================================================
+   Scroll reveal & expand (only active when JavaScript runs)
+   ========================================================== */
+.js .reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+  transition-delay: var(--delay, 0s);
+}
+
+.js .reveal.in-view {
+  opacity: 1;
+  transform: none;
+}
+
+/* bullet details unfold when an entry scrolls into view */
+.js .entry ul {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  margin-top: 0;
+  transition: max-height 0.9s ease, opacity 0.7s ease 0.15s, margin-top 0.5s ease;
+}
+
+.js .entry.in-view ul {
+  max-height: 600px;
+  opacity: 1;
+  margin-top: 12px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .js .reveal,
+  .js .entry ul {
+    transition: none;
+    opacity: 1;
+    transform: none;
+    max-height: none;
+  }
 }
 
 /* ---------- Mobile ---------- */
@@ -356,10 +440,6 @@ body {
 
   .contact-links {
     flex-direction: column;
-  }
-}
-
-  .contact-links {
-    flex-direction: column;
+    gap: 16px;
   }
 }
